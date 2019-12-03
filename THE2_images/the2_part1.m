@@ -14,7 +14,7 @@ A2_t = fft2(A2);
 %figure, imshow(fftshift(abs(A2_t)), [0, 40000])
 
 A3_t = fft2(A3);
-%figure, imshow(fftshift(abs(A3_t)), [0, 40000])
+%figure, imshow(fftshift(abs(A3_t)), [0, 500000])
 
 
 filter1 = ones(M1,N1);
@@ -28,7 +28,7 @@ for x=1:M1
    for y=1:N1
        
        distance = sqrt((x-center_x)^2+(y-center_y)^2);
-       if(distance > 24000)
+       if(distance > 250)
            filter1(x,y)=0;
        end
    end 
@@ -39,8 +39,12 @@ A1_t = A1_t .* filter1;
 
 A1_new = abs(ifft2(A1_t));
 A1_new = A1_new / 255.0;
+
+
 A1_new = imadjust(A1_new);
-figure ,imshow(A1_new)
+%figure ,imshow(A1_new)
+
+
 
 
 
@@ -55,7 +59,7 @@ center_y = (N2-1)/2;
 for x=1:M2
    for y=1:N2
        distance = sqrt((x-center_x)^2+(y-center_y)^2);
-       if(distance > 250)
+       if(distance > 250)  % 250 looks better
            filter2(x,y)=0;
        end
    end 
@@ -66,8 +70,14 @@ A2_t = A2_t .* filter2;
 
 A2_new = abs(ifft2(A2_t));
 A2_new = A2_new / 255.0;
+
 A2_new = imadjust(A2_new);
-figure , imshow(A2_new)
+
+%figure , imshow(A2_new)
+
+%figure, imshow(fftshift(fft2((abs(A2_new)))), [0, 40000])
+
+
 
 
 
@@ -76,17 +86,18 @@ filter3 = ones(M3,N3,Z3);
 
 center_x = (M3-1)/2;
 center_y = (N3-1)/2;
-center_z = (Z3-1)/2;
 
+%maxdistance = 0 ;
 
 for x=1:M3
    for y=1:N3
-        for z=1:Z3
+        
             distance = sqrt((x-center_x)^2+(y-center_y)^2);
-            if(distance > 95)
-                filter3(x,y,z)=0;
+            
+            if(distance >40 && distance < 120)
+                filter3(x,y)=0;
             end
-        end 
+        
    end 
 end
 
@@ -94,9 +105,8 @@ filter3 = ifftshift(filter3);
 A3_t = A3_t .* filter3;
 
 A3_new = abs(ifft2(A3_t));
-A3_new = A3_new / 255.0;
-
-figure , imshow(A3_new)
+A3_new= A3_new/ 255.0;
 
 
 
+figure , imshow(A3_new);

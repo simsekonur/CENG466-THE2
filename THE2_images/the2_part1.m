@@ -14,7 +14,7 @@ A2_t = fft2(A2);
 %figure, imshow(fftshift(abs(A2_t)), [0, 40000])
 
 A3_t = fft2(A3);
-%figure, imshow(fftshift(abs(A3_t)), [0, 500000])
+
 
 
 filter1 = ones(M1,N1);
@@ -22,13 +22,17 @@ filter1 = ones(M1,N1);
 center_x = (M1-1)/2;
 center_y = (N1-1)/2;
 
-
+maxdistance = 0;
+min = 0;
 
 for x=1:M1
    for y=1:N1
        
        distance = sqrt((x-center_x)^2+(y-center_y)^2);
-       if(distance > 250) % try to find the best one
+       if (distance >maxdistance)
+           maxdistance = distance;
+       end 
+       if((distance >430)&&(distance< 450)) % try to find the best one
            filter1(x,y)=0;
        end
    end 
@@ -42,7 +46,7 @@ A1_new = A1_new / 255.0;
 
 
 A1_new = imadjust(A1_new);
-%figure ,imshow(A1_new)
+figure ,imshow(A1_new)
 
 
 
@@ -59,7 +63,7 @@ center_y = (N2-1)/2;
 for x=1:M2
    for y=1:N2
        distance = sqrt((x-center_x)^2+(y-center_y)^2);
-       if(distance > 250)  % 250 looks better
+       if((distance > 60 && distance < 85) || (distance > 280 && distance < 320))  % 250 looks better
            filter2(x,y)=0;
        end
    end 
@@ -104,7 +108,7 @@ for x=1:M4
         
             distance = sqrt((x-center_x)^2+(y-center_y)^2);
             
-            if((distance >48 && distance < 60) ||(distance>130 && distance<160) )
+            if((distance >48 && distance < 60)  )
                 filter3(x,y)=0;
             end
         
@@ -126,7 +130,7 @@ for x=1:M5
         
             distance = sqrt((x-center_x)^2+(y-center_y)^2);
             
-            if((distance >48 && distance < 60) ||(distance>130 && distance<160))
+            if((distance >48 && distance < 60) )
                 filter3(x,y)=0;
             end
         
@@ -148,7 +152,7 @@ for x=1:M6
         
             distance = sqrt((x-center_x)^2+(y-center_y)^2);
             
-            if((distance >48 && distance < 60) ||(distance>130 && distance<160))
+            if((( distance >48 && distance < 60 ) ))
                 filter3(x,y)=0;
             end
         
@@ -175,4 +179,4 @@ A3_new(:,:,3) = blueChannel_new;
 
 
 
-figure , imshow(A3_new);
+%figure , imshow(A3_new);

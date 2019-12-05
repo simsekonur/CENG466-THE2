@@ -28,7 +28,7 @@ for x=1:M1
    for y=1:N1
        
        distance = sqrt((x-center_x)^2+(y-center_y)^2);
-       if(distance > 250)
+       if(distance > 250) % try to find the best one
            filter1(x,y)=0;
        end
    end 
@@ -82,19 +82,29 @@ A2_new = imadjust(A2_new);
 
 
 
-filter3 = ones(M3,N3,Z3);
 
-center_x = (M3-1)/2;
-center_y = (N3-1)/2;
 
 %maxdistance = 0 ;
+%try a different approach
+redChannel = A3_t(:,:,1);
+greenChannel = A3_t(:,:,2);
+blueChannel = A3_t(:,:,3);
 
-for x=1:M3
-   for y=1:N3
+[M4,N4] = size(redChannel);%2 by2 matrix
+[M5,N5] = size(greenChannel);
+[M6,N6] = size(blueChannel);
+
+
+
+center_x = (M4-1)/2;
+center_y = (N4-1)/2;
+filter3 = ones(M4,N4);
+for x=1:M4
+   for y=1:N4
         
             distance = sqrt((x-center_x)^2+(y-center_y)^2);
             
-            if(distance >40 && distance < 120)
+            if((distance >48 && distance < 60) ||(distance>130 && distance<160) )
                 filter3(x,y)=0;
             end
         
@@ -102,10 +112,66 @@ for x=1:M3
 end
 
 filter3 = ifftshift(filter3);
-A3_t = A3_t .* filter3;
+redChannel= redChannel .* filter3;
 
-A3_new = abs(ifft2(A3_t));
-A3_new= A3_new/ 255.0;
+redChannel_new = abs(ifft2(redChannel));
+redChannel_new= redChannel_new/ 255.0;
+
+
+center_x = (M5-1)/2;
+center_y = (N5-1)/2;
+filter3 = ones(M5,N5);
+for x=1:M5
+   for y=1:N5
+        
+            distance = sqrt((x-center_x)^2+(y-center_y)^2);
+            
+            if((distance >48 && distance < 60) ||(distance>130 && distance<160))
+                filter3(x,y)=0;
+            end
+        
+   end 
+end
+
+filter3 = ifftshift(filter3);
+greenChannel= greenChannel .* filter3;
+
+greenChannel_new = abs(ifft2(greenChannel));
+greenChannel_new= greenChannel_new/ 255.0;
+
+
+center_x = (M6-1)/2;
+center_y = (N6-1)/2;
+filter3 = ones(M6,N6);
+for x=1:M6
+   for y=1:N6
+        
+            distance = sqrt((x-center_x)^2+(y-center_y)^2);
+            
+            if((distance >48 && distance < 60) ||(distance>130 && distance<160))
+                filter3(x,y)=0;
+            end
+        
+   end 
+end
+
+filter3 = ifftshift(filter3);
+blueChannel= blueChannel .* filter3;
+
+blueChannel_new = abs(ifft2(blueChannel));
+blueChannel_new= blueChannel_new/ 255.0;
+
+
+redChannel_new = imadjust(redChannel_new);
+greenChannel_new = imadjust(greenChannel_new);
+blueChannel_new = imadjust(blueChannel_new);
+
+
+
+A3_new(:,:,1) = redChannel_new;
+A3_new(:,:,2) = greenChannel_new;
+A3_new(:,:,3) = blueChannel_new;
+
 
 
 
